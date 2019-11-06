@@ -148,10 +148,49 @@ int main(int argc, char *argv[]) {
 	
 	//set the number of players
 	configUser();
-
-
+	do
+	{	
+		printf("Input the number of players (MAX:5): ");
+		scanf("%d", &n_user);
+		if (n_user>5)
+		{
+			printf("Too many players!\n");
+		}
+		else if (n_user<1)
+		{
+			printf("invalid input players (%d)\n", n_user);
+		}
+	}
+	while (!(n_user>=1) || !(n_user<=5));
+	printf(" --> card is mixed and put into the tray\n\n");
+	printf("------------------------------------------------\n------------ ROUND 1 (cardIndex:0)--------------------------\n------------------------------------------------\n\n");
+	
 	//Game initialization --------
 	//1. players' dollar
+	printf(" ------- BETTING STEP -------\n");
+	
+	do
+	{
+		printf("   -> your betting (total:$50) : ");
+		scanf("%d", &dollar[0]);
+		if (dollar[0]>50)
+		{
+			printf("   -> you only have $50! bet again\n");
+		}
+		else if (dollar[0]<1)
+		{
+			printf("   -> invalid input for betting $%d\n", dollar[0]);
+		}
+	}
+	while (!(dollar[0]>=1) || !(dollar[0]<=50));
+	
+	for(i=1;i<n_user;i++)
+	{
+		dollar[i]=1+rand()%max;
+		printf("   -> player%d bets $%d (out of $50)\n", i, dollar[i]);		
+	}
+	
+	printf("----------------------------\n\n");
 	
 	//2. card tray
 	mixCardTray();
