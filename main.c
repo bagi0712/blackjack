@@ -21,7 +21,7 @@ int cardIndex = 0;
 
 
 //player info
-int dollar[N_MAX_USER];						//dollars that each player has
+int dollar[N_MAX_USER]; 					//dollars that each player has
 int n_user;									//number of users
 
 
@@ -82,7 +82,32 @@ int configUser(void) {
 
 //betting
 int betDollar(void) {
+	int i;
 	
+	printf(" ------- BETTING STEP -------\n");
+	
+	do
+	{
+		printf("   -> your betting (total:$%d) : ", dollar[0]);
+		bet[0] = getIntegerInput();
+		if (bet[0]>dollar[0])
+		{
+			printf("   -> you only have $%d! bet again\n", dollar[0]);
+		}
+		else if (bet[0]<1)
+		{
+			printf("   -> invalid input for betting $%d\n", bet[0]);
+		}
+	}
+	while (!(bet[0]>=1) || !(bet[0]<=dollar[0]));
+	
+	for(i=1;i<n_user;i++)
+	{
+		bet[i]=1+rand()%N_MAX_BET;
+		printf("   -> player%d bets $%d (out of $%d)\n", i, bet[i], dollar[i]);		
+	}
+	
+	printf("----------------------------\n\n");	
 }
 
 
@@ -151,7 +176,7 @@ int main(int argc, char *argv[]) {
 	do
 	{	
 		printf("Input the number of players (MAX:5): ");
-		scanf("%d", &n_user);
+		n_user = getIntegerInput();
 		if (n_user>5)
 		{
 			printf("Too many players!\n");
@@ -167,30 +192,8 @@ int main(int argc, char *argv[]) {
 	
 	//Game initialization --------
 	//1. players' dollar
-	printf(" ------- BETTING STEP -------\n");
-	
-	do
-	{
-		printf("   -> your betting (total:$50) : ");
-		scanf("%d", &dollar[0]);
-		if (dollar[0]>50)
-		{
-			printf("   -> you only have $50! bet again\n");
-		}
-		else if (dollar[0]<1)
-		{
-			printf("   -> invalid input for betting $%d\n", dollar[0]);
-		}
-	}
-	while (!(dollar[0]>=1) || !(dollar[0]<=50));
-	
-	for(i=1;i<n_user;i++)
-	{
-		dollar[i]=1+rand()%max;
-		printf("   -> player%d bets $%d (out of $50)\n", i, dollar[i]);		
-	}
-	
-	printf("----------------------------\n\n");
+	for (i=0;i<n_user;i++)
+		dollar[i] = N_DOLLAR;
 	
 	//2. card tray
 	mixCardTray();
