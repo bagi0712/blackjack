@@ -1,0 +1,43 @@
+# Project: Project1
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe -D__DEBUG__
+CC       = gcc.exe -D__DEBUG__
+WINDRES  = windres.exe
+OBJ      = main.o getIntegerInput.o cardArray.o playingGame.o cardProcessing.o declaration.o
+LINKOBJ  = main.o getIntegerInput.o cardArray.o playingGame.o cardProcessing.o declaration.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g3
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = Project1.exe
+CXXFLAGS = $(CXXINCS) -g3
+CFLAGS   = $(INCS) -g3
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+getIntegerInput.o: getIntegerInput.c
+	$(CC) -c getIntegerInput.c -o getIntegerInput.o $(CFLAGS)
+
+cardArray.o: cardArray.c
+	$(CC) -c cardArray.c -o cardArray.o $(CFLAGS)
+
+playingGame.o: playingGame.c
+	$(CC) -c playingGame.c -o playingGame.o $(CFLAGS)
+
+cardProcessing.o: cardProcessing.c
+	$(CC) -c cardProcessing.c -o cardProcessing.o $(CFLAGS)
+
+declaration.o: declaration.c
+	$(CC) -c declaration.c -o declaration.o $(CFLAGS)

@@ -1,28 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#define N_CARDSET			1
-#define N_CARD				52
-#define N_DOLLAR			50
-
-
-#define N_MAX_CARDNUM		13
-#define N_MAX_USER			5
-#define N_MAX_CARDHOLD		10
-#define N_MAX_GO			17
-#define N_MAX_BET			5
-
-#define N_MIN_ENDCARD		30
-
-
-//card tray object
-int CardTray[N_CARDSET*N_CARD];
-int cardIndex = 0;							
-
-
-//player info
-int dollar[N_MAX_USER]; 					//dollars that each player has
-int n_user;									//number of users
 
 
 //play yard information
@@ -31,139 +6,8 @@ int cardSum[N_MAX_USER];					//sum of the cards
 int bet[N_MAX_USER];						//current betting 
 int gameEnd = 0; 							//game end flag
 
-//some utility functions
 
-//get an integer input from standard input (keyboard)
-//return : input integer value
-//         (-1 is returned if keyboard input was not integer)
-int getIntegerInput(void) {
-    int input, num;
-    
-    num = scanf("%d", &input);
-    fflush(stdin);
-    if (num != 1) //if it fails to get integer
-        input = -1;
-    
-    return input;
-}
-
-
-//card processing functions ---------------
-
-//calculate the actual card number in the blackjack game
-int getCardNum(int cardnum) {
-}
-
-//print the card information (e.g. DiaA)
-void printCard(int cardnum) {
-	
-}
-
-
-//card array controllers -------------------------------
-
-//mix the card sets and put in the array
-int mixCardTray(void) {
-
-}
-
-//get one card from the tray
-int pullCard(void) {
-}
-
-
-//playing game functions -----------------------------
-
-//player settiing
-int configUser(void) {
-	
-}
-
-
-//betting
-int betDollar(void) {
-	int i;
-	
-	printf(" ------- BETTING STEP -------\n");
-	
-	do
-	{
-		printf("   -> your betting (total:$%d) : ", dollar[0]);
-		bet[0] = getIntegerInput();
-		if (bet[0]>dollar[0])
-		{
-			printf("   -> you only have $%d! bet again\n", dollar[0]);
-		}
-		else if (bet[0]<1)
-		{
-			printf("   -> invalid input for betting $%d\n", bet[0]);
-		}
-	}
-	while (!(bet[0]>=1) || !(bet[0]<=dollar[0]));
-	
-	for(i=1;i<n_user;i++)
-	{
-		bet[i]=1+rand()%N_MAX_BET;
-		printf("   -> player%d bets $%d (out of $%d)\n", i, bet[i], dollar[i]);		
-	}
-	
-	printf("----------------------------\n\n");	
-}
-
-
-//offering initial 2 cards
-void offerCards(void) {
-	int i;
-	//1. give two card for each players
-	for (i=0;i<n_user;i++)
-	{
-		cardhold[i][0] = pullCard();
-		cardhold[i][1] = pullCard();
-	}
-	//2. give two card for the operator
-	cardhold[n_user][0] = pullCard();
-	cardhold[n_user][1] = pullCard();
-	
-	return;
-}
-
-//print initial card status
-void printCardInitialStatus(void) {
-	
-}
-
-int getAction(void) {
-	
-}
-
-
-void printUserCardStatus(int user, int cardcnt) {
-	int i;
-	
-	printf("   -> card : ");
-	for (i=0;i<cardcnt;i++)
-		printCard(cardhold[user][i]);
-	printf("\t ::: ");
-}
-
-
-
-
-// calculate the card sum and see if : 1. under 21, 2. over 21, 3. blackjack
-int calcStepResult() {
-	
-}
-
-int checkResult() {
-	
-}
-
-int checkWinner() {
-	
-}
-
-
-
+//main function
 int main(int argc, char *argv[]) {
 	int roundIndex = 0;
 	int max_user;
@@ -173,22 +17,7 @@ int main(int argc, char *argv[]) {
 	
 	//set the number of players
 	configUser();
-	do
-	{	
-		printf("Input the number of players (MAX:5): ");
-		n_user = getIntegerInput();
-		if (n_user>5)
-		{
-			printf("Too many players!\n");
-		}
-		else if (n_user<1)
-		{
-			printf("invalid input players (%d)\n", n_user);
-		}
-	}
-	while (!(n_user>=1) || !(n_user<=5));
-	printf(" --> card is mixed and put into the tray\n\n");
-	printf("------------------------------------------------\n------------ ROUND 1 (cardIndex:0)--------------------------\n------------------------------------------------\n\n");
+	
 	
 	//Game initialization --------
 	//1. players' dollar
@@ -202,6 +31,7 @@ int main(int argc, char *argv[]) {
 
 	//Game start --------
 	do {
+		printf("------------------------------------------------\n------------ ROUND %d (cardIndex:%d)--------------------------\n------------------------------------------------\n\n", roundIndex+1, cardIndex);
 		
 		betDollar();
 		offerCards(); //1. give cards to all the players
