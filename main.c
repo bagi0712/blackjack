@@ -1,3 +1,35 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N_CARDSET			1
+#define N_CARD				52
+#define N_DOLLAR			50
+
+
+#define N_MAX_CARDNUM		13
+#define N_MAX_USER			5
+#define N_MAX_CARDHOLD		10
+#define N_MAX_GO			17
+#define N_MAX_BET			5
+
+#define N_MIN_ENDCARD		30
+
+
+//52장의 모든 카드에 값 부여 
+int TrumpCard[N_CARD] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
+						 
+
+//card tray object
+int CardTray[N_CARDSET*N_CARD];
+int cardIndex = 0;							
+
+
+//player info
+int dollar[N_MAX_USER]; 					//dollars that each player has
+int n_user;									//number of users
 
 
 //play yard information

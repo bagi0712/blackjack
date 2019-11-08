@@ -2,7 +2,7 @@
 
 //calculate the actual card number in the blackjack game
 int getCardNum(int cardnum) {
-	int actualNum;
+	int actualNum;         //카드가 갖는 실제 값 
 	
 	actualNum = TrumpCard[cardnum];
 	return actualNum;

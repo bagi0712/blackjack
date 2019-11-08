@@ -3,7 +3,7 @@
 //mix the card sets and put in the array
 int mixCardTray(void) {
 	
-	return
+	return 
 }
 
 //get one card from the tray
