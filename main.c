@@ -1,18 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define N_CARDSET			1
-#define N_CARD				52
-#define N_DOLLAR			50
-
-
-#define N_MAX_CARDNUM		13
-#define N_MAX_USER			5
-#define N_MAX_CARDHOLD		10
-#define N_MAX_GO			17
-#define N_MAX_BET			5
-
-#define N_MIN_ENDCARD		30
+#include "blackjack.h"
 
 
 //52장의 모든 카드에 값 부여 
@@ -75,7 +64,7 @@ int main(int argc, char *argv[]) {
 	//Game start --------
 	do {
 		printf("------------------------------------------------\n");
-		printf("------------ ROUND %d (cardIndex:%d)--------------------------\n", roundIndex+1, cardIndex);
+		printf("------------ ROUND %d (cardIndex:%d)--------------------------\n", roundIndex, cardIndex);
 		printf("------------------------------------------------\n\n");
 		
 		betDollar(); // betting step
@@ -159,7 +148,7 @@ int main(int argc, char *argv[]) {
 		}
 		
 		//result
-		printf(" -------------------- ROUND %d result ....\n", roundIndex+1);
+		printf(" -------------------- ROUND %d result ....\n", roundIndex);
 		printf("   -> your result : ");
 		checkResult(0);
 		for (i=1;i<n_user;i++)

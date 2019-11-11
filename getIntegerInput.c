@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
 //get an integer input from standard input (keyboard)
 //return : input integer value
 //         (-1 is returned if keyboard input was not integer)

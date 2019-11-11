@@ -1,4 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "blackjack.h"
+
+
+extern int TrumpCard[N_CARD];
+
+
 //card processing functions ---------------
+						 
 
 //calculate the actual card number in the blackjack game
 int getCardNum(int cardnum) {

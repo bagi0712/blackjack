@@ -1,4 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "blackjack.h"
+
+
+extern int dollar[N_MAX_USER];
+extern int n_user;
+extern int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];
+extern int cardSum[N_MAX_USER+1];
+extern int bet[N_MAX_USER];
+
+
 //playing game functions -----------------------------
+
 
 //player settiing
 int configUser(void) {
@@ -131,7 +145,7 @@ int getAction(int user) {
 
 
 //print current card status
-void printUserCardStatus(int user, int cardcnt) {
+int printUserCardStatus(int user, int cardcnt) {
 	int i;
 	
 	printf("   -> card : ");
