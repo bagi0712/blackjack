@@ -12,23 +12,26 @@ extern int TrumpCard[N_CARD];
 
 //calculate the actual card number in the blackjack game
 int getCardNum(int cardnum) {
-	int actualNum;         //카드가 갖는 실제 값 
+	int actualNum;                         //카드가 갖는 실제 값 
 	
-	actualNum = TrumpCard[cardnum];
+	actualNum = TrumpCard[cardnum];        //이미 배열 변수 TrumpCard[]를 선언할 때 카드가 갖는 실제 값을 할당했으므로 그 값을 그대로 가져옴  
 	return actualNum;
 }
 
 //print the card information (e.g. DiaA)
-void printCard(int cardnum) {
-	if ((cardnum >= 0) && (cardnum <= 9))
+void printCard(int cardnum) {              //카드 한장한장에 문양과 숫자를 할당 
+	
+	//heart pattern
+	if ((cardnum >= 0) && (cardnum <= 9))  
 		printf("HRT%d", TrumpCard[cardnum]);
 	else if (cardnum == 10)
 		printf("HRTJack");
 	else if (cardnum == 11)
 		printf("HRTQueen");
 	else if (cardnum == 12)
-		printf("HRTKing");
+		printf("HRTKing");	
 	
+	//dia pattern
 	else if ((cardnum >= 13) && (cardnum <= 22))
 		printf("DIA%d", TrumpCard[cardnum]);
 	else if (cardnum == 23)
@@ -38,6 +41,7 @@ void printCard(int cardnum) {
 	else if (cardnum == 25)
 		printf("DIAKing");
 	
+	//spade pattern
 	else if ((cardnum >= 26) && (cardnum <= 35))
 		printf("SPD%d", TrumpCard[cardnum]);
 	else if (cardnum == 36)
@@ -47,6 +51,7 @@ void printCard(int cardnum) {
 	else if (cardnum == 38)
 		printf("SPDKing");
 		
+	//clover pattern 
 	else if ((cardnum >= 39) && (cardnum <= 48))
 		printf("CLV%d", TrumpCard[cardnum]);
 	else if (cardnum == 49)

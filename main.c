@@ -4,7 +4,7 @@
 #include "blackjack.h"
 
 
-//52장의 모든 카드에 값 부여 
+//52장의 모든 카드에 계산에 사용되는 실제 값 부여 
 int TrumpCard[N_CARD] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
 						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
 						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
@@ -17,20 +17,20 @@ int cardIndex = 0;
 
 
 //player info
-int dollar[N_MAX_USER]; 					//dollars that each player has
+int dollar[N_MAX_USER]; 					//dollars that each player has- my number: 0, player N's number: N
 int n_user;									//number of users
 
 
 //play yard information
-int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];	//cards that currently the players hold
-int cardSum[N_MAX_USER+1];					//sum of the cards
-int bet[N_MAX_USER];						//current betting 
+int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];	//cards that currently the players hold- my number: 0, player N's number: N, server: n_user + 1
+int cardSum[N_MAX_USER+1];					//sum of the cards- my number: 0, player N's number: N, server: n_user + 1
+int bet[N_MAX_USER];						//current betting- my number: 0, player N's number: N
 int gameEnd = 0; 							//game end flag
 
 
 //main function
 int main(int argc, char *argv[]) {
-	int roundIndex = 1;
+	int roundIndex = 1; //1라운드부터 시작 
 	int max_user;
 	int i; 
 	int j;
@@ -48,21 +48,21 @@ int main(int argc, char *argv[]) {
 	
 	//2. card tray
 	mixCardTray();
-	
-	//3. 플레이어들의 모든 카드 덱의 값을 -1로 초기화 (빈 카드 덱과 찬 카드 덱의 구분을 위해)
-	for (i=0;i<n_user+1;i++) 
-	{
-		for (j=0;j<N_MAX_CARDHOLD;j++)
-		{
-			cardhold[i][j] = -1;
-		}
-	}
        
 
 
 
 	//Game start --------
 	do {
+		//플레이어들의 모든 카드 덱의 값을 -1로 초기화 (빈 카드 덱과 채워진 카드 덱의 구분을 위해)
+		for (i=0;i<n_user+1;i++) 
+		{
+			for (j=0;j<N_MAX_CARDHOLD;j++)
+			{
+				cardhold[i][j] = -1;
+			}
+		}
+	
 		printf("------------------------------------------------\n");
 		printf("------------ ROUND %d (cardIndex:%d)--------------------------\n", roundIndex, cardIndex);
 		printf("------------------------------------------------\n\n");
@@ -76,11 +76,12 @@ int main(int argc, char *argv[]) {
 		
 		//my turn
 		printf(">>> my turn! -------------\n");
-		printUserCardStatus(0, cardcnt(0));
+		printUserCardStatus(0, cardcnt(0)); //print current card status
 		
-		if (calcStepResult(0) == 21)
+		//check the card status
+		if (calcStepResult(0) == 21) //처음 두 장의 카드 합이 21이면 블랙잭 
 		{
-			dollar[0] + bet[0]*2;
+			dollar[0] += bet[0]*2;
 			printf("Black Jack!congratulation, you win!! --> +$%d ($%d)\n", bet[0]*2, dollar[0]);
 		}
 		else if (calcStepResult(0) < 21)		
@@ -88,7 +89,10 @@ int main(int argc, char *argv[]) {
 			getAction(0);
 		
 			if (calcStepResult(0) > 21)
-				printf("DEAD (sum:%d) --> -$%d ($%d)\n", calcStepResult(0), bet[0], dollar[0] - bet[0]);
+			{
+				dollar[0] -= bet[0];
+				printf("DEAD (sum:%d) --> -$%d ($%d)\n", calcStepResult(0), bet[0], dollar[0]);				
+			}
 		}
 		else
 			printf("\n");
@@ -98,47 +102,56 @@ int main(int argc, char *argv[]) {
 		for (i=1;i<n_user;i++) //each player
 		{
 			printf("\n\n>>> player %d turn! -------------\n", i);
-			printUserCardStatus(i, cardcnt(i)); //print current card status printUserCardStatus();
-			if (calcStepResult(i) == 21) //check the card status ::: calcStepResult()
+			printUserCardStatus(i, cardcnt(i)); //print current card status
+			
+			//check the card status
+			if (calcStepResult(i) == 21) //처음 두 장의 카드 합이 21이면 블랙잭
 			{
-				dollar[i] + bet[i]*2;
+				dollar[i] += bet[i]*2;
 				printf("Black Jack!congratulation, you win!! --> +$%d ($%d)\n", bet[i]*2, dollar[i]);
 			}
-			else if (calcStepResult(i) < 17)
+			else if (calcStepResult(i) < 17) 
 			{
 				getAction(i);
 				
 				if (calcStepResult(i) > 21)
 				{
-					printf("DEAD (sum:%d) --> -$%d ($%d)\n", calcStepResult(i), bet[i], dollar[i] - bet[i]);	
+					dollar[i] -= bet[i];
+					printf("DEAD (sum:%d) --> -$%d ($%d)\n", calcStepResult(i), bet[i], dollar[i]);	
 				}
 			}
 			else if ((calcStepResult(i) >= 17) && (calcStepResult(i) < 21))
 			{
 				printf("STAY!\n");
 			}
-			//GO? STOP? ::: getAction()
-			//check if the turn ends or not
 		}
 		
 		
 		//server's turn 
 		printf("\n\n>>> server turn! ------------------------\n");
-		printUserCardStatus(n_user, cardcnt(n_user)); //print current card status printUserCardStatus();
-	
-		if (calcStepResult(n_user) == 21)
+		printUserCardStatus(n_user, cardcnt(n_user)); //print current card status
+		
+		//check the card status
+		if (calcStepResult(n_user) == 21) //처음 두 장의 카드 합이 21이면 블랙잭
 		{
 			printf("Black Jack!T_T... server win\n");
 			printf("[[[[[[[ server result is ....  Blackjack, T_T all remained players lose! ]]]]]]]\n");
 		}
 		else if (calcStepResult(n_user) < 17)
 		{
-			getAction(n_user);
-					
+			do {
+				getAction(n_user);
+			} while (calcStepResult(n_user) < 17);
+			
 			if (calcStepResult(n_user) > 21)
 			{
 				printf("server DEAD (sum:%d)\n", calcStepResult(n_user));
-				printf("[[[[[[[ server result is .... ....overflow!! ]]]]]]]\n");
+				printf("[[[[[[[ server result is .... ....overflow!! ]]]]]]]\n\n\n");
+			}
+			else if ((calcStepResult(n_user) >= 17) && (calcStepResult(n_user) <= 21))
+			{
+				printf("STAY!\n");
+				printf("[[[[[[[ server result is ....  %d ]]]]]]]\n\n\n", calcStepResult(n_user));
 			}
 		}
 		else if ((calcStepResult(n_user) >= 17) && (calcStepResult(n_user) < 21))
