@@ -4,11 +4,13 @@
 #include "blackjack.h"
 
 
+extern int cardIndex;
 extern int dollar[N_MAX_USER];
 extern int n_user;
 extern int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];
 extern int cardSum[N_MAX_USER+1];
 extern int bet[N_MAX_USER];
+extern int gameEnd;
 
 
 //playing game functions -----------------------------
@@ -76,11 +78,13 @@ void offerCards(void) {
 	{
 		//give one card for the server
 		cardhold[n_user][i] = pullCard(); 
+		checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행 
 	
 		//give one card for each players including me
 		for (j=0;j<n_user;j++)
 		{
 			cardhold[j][i] = pullCard();
+			checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
 		}
 	}
 	
@@ -139,8 +143,9 @@ int getAction(int user) {
 			
 			if (action == 0)
 				{
-				cardhold[0][cardcnt(0)] = pullCard(); //비어 있는 첫번째 cardhold[][] 변수에 새 카드를 받음 
-				printUserCardStatus(0, cardcnt(0)); //새로 받은 카드를 포함한 현재 카드 상태 출력 
+				cardhold[0][cardcnt(0)] = pullCard(); //비어 있는 cardhold 변수(=(cardcnt(0)+1)번째 cardhold 변수)에 새 카드를 받음 
+				checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
+				printUserCardStatus(0); //새로 받은 카드를 포함한 현재 카드 상태 출력 
 			}
 			else
 				break;
@@ -150,10 +155,11 @@ int getAction(int user) {
 	//players & server's turn
 	else 
 	{
-		do   {
+		do {
 			printf("GO!\n");
-			cardhold[user][cardcnt(user)] = pullCard(); //비어 있는 첫번째 cardhold[][] 변수에 새 카드를 받음
-			printUserCardStatus(user, cardcnt(user)); //새로 받은 카드를 포함한 현재 카드 상태 출력
+			cardhold[user][cardcnt(user)] = pullCard(); //비어 있는 cardhold 변수(=(cardcnt(user)+1)번째 cardhold 변수)에 새 카드를 받음
+			checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
+			printUserCardStatus(user); //새로 받은 카드를 포함한 현재 카드 상태 출력
 		} while (calcStepResult(user) < 17); //카드 합이 17 미만일 경우 go를 선택하는 것을 반복 
 					
 		if ((calcStepResult(user) >= 17) && (calcStepResult(user) < 21))
@@ -166,11 +172,11 @@ int getAction(int user) {
 
 
 //print current card status
-int printUserCardStatus(int user, int cardcnt) {
+int printUserCardStatus(int user) {
 	int i;
 	
 	printf("   -> card : ");
-	for (i=0;i<cardcnt;i++) //채워져 있는 cardhold[][] 변수까지의 카드들을 출력 
+	for (i=0;i<cardcnt(user);i++) //채워져 있는 cardhold 변수까지의 카드들을 출력 
 	{
 		printCard(cardhold[user][i]);
 		printf(" ");
@@ -179,7 +185,7 @@ int printUserCardStatus(int user, int cardcnt) {
 }
 
 
-// calculate the card sum and see if : 1. under 21, 2. over 21, 3. blackjack
+// calculate the card sum
 int calcStepResult(int user) {         
 	int i;
 	
@@ -188,10 +194,10 @@ int calcStepResult(int user) {
 	
 	for (i=0;i<cardcnt(user);i++)
 	{
-		cardSum[user] += getCardNum(cardhold[user][i]); //채워져 있는 cardhold[][] 변수까지의 카드 값을 합함
+		cardSum[user] += getCardNum(cardhold[user][i]); //채워져 있는 cardhold 변수까지의 카드 값을 합함
 	}
 	
-	if (cardSum[user] > 21)
+	if (cardSum[user] > 21) //card sum이 21이상이면 Ace카드의 값을 11에서 1로 변경 
 	{
 		for (i=0;i<cardcnt(user);i++)
 		{
@@ -207,21 +213,22 @@ int calcStepResult(int user) {
 	return cardSum[user];
 }
 
+//win? lose?
 int checkResult(int user) {
-	if ((cardcnt(user) == 2) && (calcStepResult(user) == 21)) //두 장의 카드 합이 21이면 블랙잭 (달러 계산은 메인함수에서 이미 처리)
+	if ((cardcnt(user) == 2) && (calcStepResult(user) == 21)) //두 장의 카드 합이 21이면 블랙잭 (dollar 계산은 메인함수에서 이미 처리)
 	{
 		printf("BlackJack! win ($%d)", dollar[user]); 
 	}
-	else if ((cardcnt(n_user) == 2) && (calcStepResult(n_user) == 21)) //server가 블랙잭이면 바로 패배 
+	else if ((cardcnt(n_user) == 2) && (calcStepResult(n_user) == 21)) //user가 블랙잭이 아닌데 server가 블랙잭이면 바로 패배 
 	{
 		dollar[user] -= bet[user];
 		printf("lose! (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);
 	}
-	else if (calcStepResult(user) > 21) //카드 합이 21을 초과하면 바로 패배 (달러 계산은 메인함수에서 이미 처리)
+	else if (calcStepResult(user) > 21) //user의 카드 합이 21을 초과하면 바로 패배 (dollar 계산은 메인함수에서 이미 처리)
 	{
 		printf("lose due to overflow! ($%d)\n", dollar[user]);
 	}
-	else if (calcStepResult(n_user) > 21) //server의 카드 합이 21을 초과하면 user는 승리 
+	else if (calcStepResult(n_user) > 21) //user의 카드 합이 21 이하인데 server의 카드 합이 21을 초과하면 user는 승리 
 	{
 		dollar[user] += bet[user];          
 		printf("win (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]); 		
@@ -237,17 +244,41 @@ int checkResult(int user) {
 		printf("lose! (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);
 	}
 }
-int checkWinner() {
-	int max = 0;
-	int winner;
-	int user;
+
+//카드 소진 검사 
+int checkCardIndex() {
+	if (cardIndex == N_CARD) //card tray에 카드가 소진됨
+	{	
+		gameEnd++; //game end flag(1)
+	}
+}
+
+//파산 검사
+int checkDollar() {
+	int i;
 	
-	for(user=0;user<n_user;user++)
+	for (i=0;i<n_user;i++)
 	{
-		if (dollar[user] > max)
+		if (dollar[i] == 0) //player 한명이 파산
 		{
-			max = dollar[user];
-			winner = user;
+			gameEnd++;
+			gameEnd++; //game end flag(2) 
+		}
+	}
+}
+
+ 
+int checkWinner() {
+	int dollarMax = 0; //변수의 값을 0으로 초기화 
+	int winner;
+	int i;
+	
+	for(i=0;i<n_user;i++) //나를 포함한 player들의 dollar을 비교 
+	{
+		if (dollar[i] > dollarMax)
+		{
+			dollarMax = dollar[i];
+			winner = i;
 		}
 	}	
 	
