@@ -5,10 +5,10 @@
 
 
 //52장의 모든 카드에 계산에 사용되는 실제 값 부여 
-int TrumpCard[N_CARD] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
-						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
-						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
-						 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
+int TrumpCard[N_CARD] = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+						 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+						 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
+						 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
 						 
 
 //card tray object
@@ -173,7 +173,37 @@ int main(int argc, char *argv[]) {
 		
 		roundIndex++;
 		
+		if ((cardIndex >= 52) || (dollar[0] < 1))
+		{
+			gameEnd++;
+			break;
+		}
+			
 	} while (gameEnd == 0);
+	
+	
+	
+	
+	//Game result --------
+	if (cardIndex == 52)
+	{
+		printf("card ran out of the tray!! finishing the game...\n\n\n\n");
+	}
+	else if (dollar[0] < 1)
+	{
+		printf("   -> you are bankrupted! game will be ended\n\n\n\n");
+	}
+	printf(" -------------------------------------------\n");
+	printf(" -------------------------------------------\n");
+	printf(" -------------------------------------------\n");
+	printf(" -------------------------------------------\n");
+	printf("game end! your money :$ %d,", dollar[0]);
+	if (n_user > 2)
+	{
+		printf(" players's money :");
+		for (i=1;i<n_user;i++)
+			printf("$%d ", dollar[i]);
+	}
 	
 	checkWinner();
 	

@@ -22,7 +22,9 @@ int getCardNum(int cardnum) {
 void printCard(int cardnum) {              //카드 한장한장에 문양과 숫자를 할당 
 	
 	//heart pattern
-	if ((cardnum >= 0) && (cardnum <= 9))  
+	if (cardnum == 0)
+		printf("HRTA");
+	else if ((cardnum >= 1) && (cardnum <= 9))  
 		printf("HRT%d", TrumpCard[cardnum]);
 	else if (cardnum == 10)
 		printf("HRTJack");
@@ -32,7 +34,9 @@ void printCard(int cardnum) {              //카드 한장한장에 문양과 숫자를 할당
 		printf("HRTKing");	
 	
 	//dia pattern
-	else if ((cardnum >= 13) && (cardnum <= 22))
+	else if (cardnum == 13)
+		printf("DIAA");
+	else if ((cardnum >= 14) && (cardnum <= 22))
 		printf("DIA%d", TrumpCard[cardnum]);
 	else if (cardnum == 23)
 		printf("DIAJack");
@@ -42,7 +46,9 @@ void printCard(int cardnum) {              //카드 한장한장에 문양과 숫자를 할당
 		printf("DIAKing");
 	
 	//spade pattern
-	else if ((cardnum >= 26) && (cardnum <= 35))
+	else if (cardnum == 26)
+		printf("SPDA");
+	else if ((cardnum >= 27) && (cardnum <= 35))
 		printf("SPD%d", TrumpCard[cardnum]);
 	else if (cardnum == 36)
 		printf("SPDJack");
@@ -52,7 +58,9 @@ void printCard(int cardnum) {              //카드 한장한장에 문양과 숫자를 할당
 		printf("SPDKing");
 		
 	//clover pattern 
-	else if ((cardnum >= 39) && (cardnum <= 48))
+	else if (cardnum == 39)
+		printf("CLVA");
+	else if ((cardnum >= 40) && (cardnum <= 48))
 		printf("CLV%d", TrumpCard[cardnum]);
 	else if (cardnum == 49)
 		printf("CLVJack");

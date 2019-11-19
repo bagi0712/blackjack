@@ -187,13 +187,37 @@ int calcStepResult(int user) {
 		cardSum[i] = 0;      // 처음 카드 합을 0으로 초기화
 	
 	for (i=0;i<cardcnt(user);i++)
-		cardSum[user] += getCardNum(cardhold[user][i]); //채워져 있는 cardhold[][] 변수까지의 카드 값을 합함 
+	{
+		cardSum[user] += getCardNum(cardhold[user][i]); //채워져 있는 cardhold[][] 변수까지의 카드 값을 합함
+	}
+	
+	if (cardSum[user] > 21)
+	{
+		for (i=0;i<cardcnt(user);i++)
+		{
+			if (getCardNum(cardhold[user][i]) == 11) //Ace카드가 있는지 검사 
+			{
+				cardSum[user] -= 10; //Ace카드의 값을 11에서 1로 변경 
+			}
+			if (cardSum[user] <= 21)
+				break;
+		}
+	}
 	
 	return cardSum[user];
 }
 
 int checkResult(int user) {
-	if (calcStepResult(user) > 21) //카드 합이 21을 초과하면 바로 패배 
+	if ((cardcnt(user) == 2) && (calcStepResult(user) == 21)) //두 장의 카드 합이 21이면 블랙잭 (달러 계산은 메인함수에서 이미 처리)
+	{
+		printf("BlackJack! win ($%d)", dollar[user]); 
+	}
+	else if ((cardcnt(n_user) == 2) && (calcStepResult(n_user) == 21)) //server가 블랙잭이면 바로 패배 
+	{
+		dollar[user] -= bet[user];
+		printf("lose! (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);
+	}
+	else if (calcStepResult(user) > 21) //카드 합이 21을 초과하면 바로 패배 (달러 계산은 메인함수에서 이미 처리)
 	{
 		printf("lose due to overflow! ($%d)\n", dollar[user]);
 	}
@@ -214,5 +238,18 @@ int checkResult(int user) {
 	}
 }
 int checkWinner() {
+	int max = 0;
+	int winner;
+	int user;
 	
+	for(user=0;user<n_user;user++)
+	{
+		if (dollar[user] > max)
+		{
+			max = dollar[user];
+			winner = user;
+		}
+	}	
+	
+	return winner;
 }
