@@ -191,13 +191,26 @@ int main(int argc, char *argv[]) {
 	{
 		printf("card ran out of the tray!! finishing the game...\n\n\n\n");
 	}
-	else if (gameEnd == 2) //game end flag(2): player 한명이 파산
+	else //game end flag(2): player 한명이 파산
 	{
+		if (gameEnd == 2) //내가 파산한 경우 (gameEnd == (0 + 2))
+		{ 
 		printf("   -> you are bankrupted! game will be ended\n\n\n\n");
+		}
+		else //computer player가 파산한 경우 (gameEnd == (i + 2))
+		{
+			for (i=1;i<n_user;i)
+			{
+				if (gameEnd == i+2)
+				{
+					printf("   -> player %d's bankrupted! game will be ended\n\n\n\n", i);
+				}
+			}
+		}
 	}
-	printf(" -------------------------------------------\n");
-	printf(" -------------------------------------------\n");
-	printf(" -------------------------------------------\n");
+	printf(" -------------------------------------------\n\n");
+	printf(" -------------------------------------------\n\n");
+	printf(" -------------------------------------------\n\n");
 	printf(" -------------------------------------------\n");
 	printf("game end! your money :$ %d,", dollar[0]);
 	if (n_user > 2)
@@ -209,11 +222,11 @@ int main(int argc, char *argv[]) {
 	
 	if (checkWinner() == 0) //내가 최종 승자일 때 
 	{
-		printf("\n\nyou win!!!!\n");
+		printf("\n\n\nyou win!!!!\n");
 	}
 	else //computer player가 최종 승자일 때
 	{
-		printf("player %d's win", checkWinner());
+		printf("\n\n\nplayer %d's win\n", checkWinner());
 	}
 	
 	

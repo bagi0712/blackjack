@@ -78,7 +78,7 @@ void offerCards(void) {
 	{
 		//give one card for the server
 		cardhold[n_user][i] = pullCard(); 
-		checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행 
+		checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행               
 	
 		//give one card for each players including me
 		for (j=0;j<n_user;j++)
@@ -233,7 +233,7 @@ int checkResult(int user) {
 		dollar[user] += bet[user];          
 		printf("win (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]); 		
 	}
-	else if (calcStepResult(user) >= calcStepResult(n_user)) //server의 카드 합보다 user의 카드 합이 크면 승리 
+	else if (calcStepResult(user) >= calcStepResult(n_user)) //server의 카드 합보다 user의 카드 합이 같거나 크면 승리 
 	{
 		dollar[user] += bet[user];
 		printf("win (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);
@@ -249,7 +249,7 @@ int checkResult(int user) {
 int checkCardIndex() {
 	if (cardIndex == N_CARD) //card tray에 카드가 소진됨
 	{	
-		gameEnd++; //game end flag(1)
+		gameEnd = 1; //game end flag(1)
 	}
 }
 
@@ -261,8 +261,7 @@ int checkDollar() {
 	{
 		if (dollar[i] == 0) //player 한명이 파산
 		{
-			gameEnd++;
-			gameEnd++; //game end flag(2) 
+			gameEnd = i+2; //game end flag(2): gameEnd 값이 0이면 게임이 끝나지 않고 1이면 game end flag(1)과 겹치므로 2를 더해줌 
 		}
 	}
 }
@@ -282,5 +281,5 @@ int checkWinner() {
 		}
 	}	
 	
-	return winner;
+	return winner; //승리한 플레이어 번호를 반환 
 }
