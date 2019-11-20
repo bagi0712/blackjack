@@ -68,7 +68,12 @@ int main(int argc, char *argv[]) {
 		printf("------------------------------------------------\n\n");
 		
 		betDollar(); // betting step
-		offerCards(); // give cards to all the players
+		
+		offerCards(); // give cards to all the players	
+		if (gameEnd != 0)
+		{
+			break;
+		}
 		
 		printCardInitialStatus(); //print initial card status
 		printf("\n------------------ GAME start --------------------------\n");
@@ -88,7 +93,11 @@ int main(int argc, char *argv[]) {
 		}
 		else if (calcStepResult(0) < 21)		
 		{
-			getAction(0); //go? stay?
+			getAction(0); //go? stay? 반복순환 
+			if (gameEnd != 0)
+			{
+				break;
+			}
 		
 			if (calcStepResult(0) > 21) //카드 합이 21을 초과하게 되면 패배 
 			{
@@ -116,7 +125,11 @@ int main(int argc, char *argv[]) {
 			}
 			else if (calcStepResult(i) < 17)
 			{
-				getAction(i); //카드 합이 17 미만이면 go 반복, 17 이상 21 미만이면 stay  
+				getAction(i); //카드 합이 17 미만이면 go 반복, 17 이상 21 미만이면 stay (21일시 바로 다음 코드로 넘어감) 
+				if (gameEnd != 0)
+				{
+					break;
+				} 
 				
 				if (calcStepResult(i) > 21) //go를 하여 카드 합이 21을 초과하게 되면 패배
 				{
@@ -145,7 +158,11 @@ int main(int argc, char *argv[]) {
 		}
 		else if (calcStepResult(n_user) < 17)
 		{
-			getAction(n_user); //카드 합이 17 미만이면 go 반복, 17 이상 21 미만이면 stay
+			getAction(n_user); //카드 합이 17 미만이면 go 반복, 17 이상 21 미만이면 stay (21일시 바로 다음 코드로 넘어감) 
+			if (gameEnd != 0)
+			{
+				break;
+			}
 			
 			if (calcStepResult(n_user) > 21) //go를 하여 server의 카드 합이 21을 초과하는 경우 남은 player들은 모두 승리 
 			{
@@ -164,7 +181,7 @@ int main(int argc, char *argv[]) {
 		}
 		
 		
-		
+		 
 		
 		//Round result --------
 		printf(" -------------------- ROUND %d result ....\n", roundIndex);

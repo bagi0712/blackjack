@@ -78,13 +78,23 @@ void offerCards(void) {
 	{
 		//give one card for the server
 		cardhold[n_user][i] = pullCard(); 
-		checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행               
+		
+		checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
+		if (gameEnd != 0)
+		{
+			break;
+		}               
 	
 		//give one card for each players including me
 		for (j=0;j<n_user;j++)
 		{
 			cardhold[j][i] = pullCard();
+			
 			checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
+			if (gameEnd != 0)
+			{
+				break;
+			}
 		}
 	}
 	
@@ -144,7 +154,13 @@ int getAction(int user) {
 			if (action == 0)
 				{
 				cardhold[0][cardcnt(0)] = pullCard(); //비어 있는 cardhold 변수(=(cardcnt(0)+1)번째 cardhold 변수)에 새 카드를 받음 
+			
 				checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
+				if (gameEnd != 0)
+				{
+					break;
+				}
+			
 				printUserCardStatus(0); //새로 받은 카드를 포함한 현재 카드 상태 출력 
 			}
 			else
@@ -158,7 +174,13 @@ int getAction(int user) {
 		do {
 			printf("GO!\n");
 			cardhold[user][cardcnt(user)] = pullCard(); //비어 있는 cardhold 변수(=(cardcnt(user)+1)번째 cardhold 변수)에 새 카드를 받음
+		
 			checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
+			if (gameEnd != 0)
+			{
+				break;
+			}
+		
 			printUserCardStatus(user); //새로 받은 카드를 포함한 현재 카드 상태 출력
 		} while (calcStepResult(user) < 17); //카드 합이 17 미만일 경우 go를 선택하는 것을 반복 
 					
