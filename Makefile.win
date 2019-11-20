@@ -4,8 +4,8 @@
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = main.o getIntegerInput.o cardArray.o playingGame.o cardProcessing.o
-LINKOBJ  = main.o getIntegerInput.o cardArray.o playingGame.o cardProcessing.o
+OBJ      = main.o getIntegerInput.o cardArray.o playingGame.o cardProcessing.o endingGame.o
+LINKOBJ  = main.o getIntegerInput.o cardArray.o playingGame.o cardProcessing.o endingGame.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -g3
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -38,3 +38,6 @@ playingGame.o: playingGame.c
 
 cardProcessing.o: cardProcessing.c
 	$(CC) -c cardProcessing.c -o cardProcessing.o $(CFLAGS)
+
+endingGame.o: endingGame.c
+	$(CC) -c endingGame.c -o endingGame.o $(CFLAGS)

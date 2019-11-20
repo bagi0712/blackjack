@@ -19,10 +19,10 @@ int mixCardTray(void) {
 	for (i=0;i<N_CARD;i++)             //난수 할당의 중복을 막기 위한 for문 중첩   
 	{
 		CardTray[i] = rand() % N_CARD;
-		for (j=0;j<i;j++)	           //i보다 작은 번호의 카드트레이에 i번째 카드와 중복되는 것이 있는지 검사 
+		for (j=0;j<i;j++)	           //i보다 작은 번호의 card tray에 i번째 카드와 중복되는 것이 있는지 검사 
 		{
 			if (CardTray[i] == CardTray[j])
-				i--;                   //중복이 있으면 i번 카드트레이의 카드를 다시 설정 
+				i--;                   //중복이 있으면 i번 card tray의 카드를 다시 설정 
 		}
 	}
 	return;
@@ -30,6 +30,11 @@ int mixCardTray(void) {
 
 //get one card from the tray
 int pullCard(void) {
-	cardIndex++;                       //카드를 꺼낼 때마다 카드인덱스의 값에 1을 더함  
-	return CardTray[cardIndex-1];      //반환 전에 카드인덱스에 먼저 1을 더했으므로 다시 1을 빼고 카드트레이에서 카드를 가져옴 
+	if (cardIndex >= N_CARD)           //카드를 다 쓴 경우 더이상 카드를 꺼내지 않음 
+	{
+		return -1;
+	}  
+	
+	cardIndex++;                       //카드를 꺼낼 때마다 card index의 값에 1을 더함  
+	return CardTray[cardIndex-1];      //반환 전에 card index에 먼저 1을 더했으므로 다시 1을 빼고 card tray에서 카드를 가져옴 
 }
