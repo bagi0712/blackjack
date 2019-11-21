@@ -20,7 +20,7 @@ int configUser(void) {
 	do
 	{	
 		printf("Input the number of players (MAX:%d): ", N_MAX_USER);
-		n_user = getIntegerInput(); //player 수를 입력받음 
+		n_user = getIntegerInput(); //Enter number of players 
 		if (n_user>N_MAX_USER) 
 		{
 			printf("Too many players!\n");
@@ -30,7 +30,7 @@ int configUser(void) {
 			printf("invalid input players (%d)\n", n_user);
 		}
 	}
-	while (!(n_user>=1) || !(n_user<=N_MAX_USER)); //최대 player 수를 초과하거나 잘못된 값을 입력할 시 다시 입력받는 것을 반복 
+	while (!(n_user>=1) || !(n_user<=N_MAX_USER)); //Repeat receiving re-entering if the maximum number of players is exceeded or an invalid value is entered 
 	printf(" --> card is mixed and put into the tray\n\n");
 	
 	return 0;
@@ -43,7 +43,7 @@ int betDollar(void) {
 	
 	printf(" ------- BETTING STEP -------\n");
 	
-	//나의 배팅 금액(bet[0])을 입력받음
+	//Receive my betting amount (bet[0])
 	do
 	{
 		printf("   -> your betting (total:$%d) : ", dollar[0]); 
@@ -57,12 +57,12 @@ int betDollar(void) {
 			printf("   -> invalid input for betting $%d\n", bet[0]);
 		}
 	}
-	while (!(bet[0]>=1) || !(bet[0]<=dollar[0])); //보유한 자본 한도를 초과하거나 잘못된 값을 배팅할 시 다시 입력받는 것을 반복 
+	while (!(bet[0]>=1) || !(bet[0]<=dollar[0])); //Repeat receiving re-entering if asset limits are exceeded or incorrect values are betted 
 	
-	//computer players의 배팅 금액(bet[N])을 할당함 
+	//Allocated the betting amount (bet[N]) of the computer players 
 	for(i=1;i<n_user;i++)
 	{
-		bet[i] = 1 + rand() % N_MAX_BET; //최소 1에서 최대 N_MAX_BET 중 임의 지정 
+		bet[i] = 1 + rand() % N_MAX_BET; //Randomly allocate the betting amount between maximum N_MAX_BET and minimum 1 
 		printf("   -> player%d bets $%d (out of $%d)\n", i, bet[i], dollar[i]);	
 	}
 	
@@ -77,13 +77,13 @@ void offerCards(void) {
 	int i;
 	int j;
 	
-	for (i=0;i<2;i++) //server, me, players 순으로 한장씩 카드를 주는 것을 두 번 반복함 
+	for (i=0;i<2;i++) //Repeat giving one card to server, me, and players twice. 
 	{
 		//give one card for the server
-		cardhold[n_user][i] = pullCard(); //(n_user + 1)번째 행의 cardhold 변수 = server의 cardhold 변수 
+		cardhold[n_user][i] = pullCard(); //Cardhold variable in the (n_user + 1)th row =  server's cardhold variable 
 		
-		checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
-		if (gameEnd != 0) //game end flag --> 루프 빠져나오기 
+		checkCardIndex(); //Run the card exhaustion check each time you eject the card
+		if (gameEnd != 0) //game end flag --> Loop Out 
 		{
 			break;
 		}               
@@ -91,10 +91,10 @@ void offerCards(void) {
 		//give one card for each players including me
 		for (j=0;j<n_user;j++)
 		{
-			cardhold[j][i] = pullCard(); //0번째 행의 cardhold 변수 = 나의 cardhold 변수, N번째 행의 cardhold 변수 = player N의 cardhold 변수 
+			cardhold[j][i] = pullCard(); //Cardhold variable in the first row =  my cardhold variable, Cardhold variable in the (N + 1)th row =  player N's cardhold variable 
 			
-			checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
-			if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+			checkCardIndex(); //Run the card exhaustion check each time you eject the card
+			if (gameEnd != 0) //game end flag --> Loop Out
 			{
 				break;
 			}
@@ -109,8 +109,8 @@ void printCardInitialStatus(void) {
 	printf(" ----------- CARD OFFERING ---------------\n");
 
 	//server's card status
-	printf(" --- server      : X "); //server의 첫번째 카드 자리에는 X를 출력함 
-	printCard(cardhold[n_user][1]); //server의 두번째 카드는 보여줌
+	printf(" --- server      : X "); //X is printed on the first card digit of the server 
+	printCard(cardhold[n_user][1]); //Show the second card of the server
 	
 	//my card status
 	printf("\n   -> you        : ");
@@ -130,12 +130,12 @@ void printCardInitialStatus(void) {
 	printf("\n"); 
 }
 
-//갖고 있는 카드의 장수
+//the number of cards in the cardhold
 int cardcnt(int user) {
-	int cardcnt = 0; //카드 장수를 세기 전 cardcnt 값은 0으로 초기화 
+	int cardcnt = 0; //The cardcnt value is reset to zero before cards are counted 
 	int i;
 	
-	for (i=0;cardhold[user][i] != -1;i++) //cardhold 변수의 비어있는 열(변수의 값 = -1)에서 덧셈을 멈춤
+	for (i=0;cardhold[user][i] != -1;i++) //Stop adding at empty column of cardhold variable (value of empty variable is initialized to -1 by main function)
 		cardcnt++;
 	
 	return cardcnt;
@@ -143,9 +143,9 @@ int cardcnt(int user) {
 
 
 int getAction(int user) {
-	int action;     //go 또는 stay를 입력받는 변수 
+	int action;     //variable that receive 'go' or 'stay' 
 	
-	//my turn: go 또는 stay를 직접 입력받음 
+	//my turn: 'go' or 'stay' entered directly 
 	if (user == 0) 
 	{
 		do {
@@ -154,36 +154,36 @@ int getAction(int user) {
 			
 			if (action == 0)
 			{
-				cardhold[0][cardcnt(0)] = pullCard(); //cardhold 변수의 비어있는 열( = (cardcnt(0) + 1)번째 열)에 새 카드를 받음 
+				cardhold[0][cardcnt(0)] = pullCard(); //Get a new card in empty column of cardhold variable
 			
-				checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
-				if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+				checkCardIndex(); //Run the card exhaustion check each time you eject the card
+				if (gameEnd != 0) //game end flag --> Loop Out
 				{
 					break;
 				}
 			
-				printUserCardStatus(0); //새로 받은 카드를 포함한 현재 카드 상태 출력 
+				printUserCardStatus(0); //Print current card status, including newly received card 
 			}
 			else
 				break;
 		} while (calcStepResult(0) < 21);
 	}
 	
-	//players & server's turn: 카드 합이 17 미만일 경우 go를 반복 
+	//players & server's turn: Repeat 'go' if card sum is less than 17 
 	else 
 	{
 		do {
-			printf("GO!\n"); //카드 합이 17 미만일 때 함수가 실행되므로 일단 go  
-			cardhold[user][cardcnt(user)] = pullCard(); //cardhold 변수의 비어있는 열( = (cardcnt(user) + 1)번째 열)에 새 카드를 받음
+			printf("GO!\n");  
+			cardhold[user][cardcnt(user)] = pullCard(); //Get a new card in empty column of cardhold variable
 		
-			checkCardIndex(); //카드를 꺼낼 때마다 카드 소진 검사 실행
-			if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+			checkCardIndex(); //Run the card exhaustion check each time you eject the card
+			if (gameEnd != 0) //game end flag --> Loop Out
 			{
 				break;
 			}
 		
-			printUserCardStatus(user); //새로 받은 카드를 포함한 현재 카드 상태 출력
-		} while (calcStepResult(user) < 17); //카드 합이 17 미만일 경우 go를 선택하는 것을 반복 
+			printUserCardStatus(user); //Print current card status, including newly received card 
+		} while (calcStepResult(user) < 17); //Repeat 'go' if card sum is less than 17 
 					
 		if ((calcStepResult(user) >= 17) && (calcStepResult(user) < 21))
 		{
@@ -199,7 +199,7 @@ int printUserCardStatus(int user) {
 	int i;
 	
 	printf("   -> card : ");
-	for (i=0;i<cardcnt(user);i++) //cardhold 변수에 채워진 카드들을 출력 
+	for (i=0;i<cardcnt(user);i++) //Print cards filled in cardhold variable 
 	{
 		printCard(cardhold[user][i]);
 		printf(" ");
@@ -215,22 +215,22 @@ int calcStepResult(int user) {
 	int i;
 	
 	for (i=0;i<n_user+1;i++)
-		cardSum[i] = 0;      // 처음 카드 합을 0으로 초기화
+		cardSum[i] = 0;      //Initialize first card sum to zero
 	
 	for (i=0;i<cardcnt(user);i++)
 	{
-		cardSum[user] += getCardNum(cardhold[user][i]); //cardhold 변수의 채워진 열까지의 카드 값을 합함
+		cardSum[user] += getCardNum(cardhold[user][i]); //Sum cards filled in cardhold variable
 	}
 	
-	if (cardSum[user] > 21) //카드 합이 21이상이면 Ace카드의 값을 변경 
+	if (cardSum[user] > 21) //Change the value of the Ace card if the sum of the cards exceeds 21 
 	{
 		for (i=0;i<cardcnt(user);i++)
 		{
-			if (getCardNum(cardhold[user][i]) == 11) //Ace카드가 있는지 검사 
+			if (getCardNum(cardhold[user][i]) == 11) //Inspect for Ace Card 
 			{
-				cardSum[user] -= 10; //Ace카드의 값을 11에서 1로 변경 
+				cardSum[user] -= 10; //Change the value of the Ace card from 11 to 1 
 			}
-			if (cardSum[user] <= 21) //카드 합이 21 이하가 되면 Ace카드 값 변경 중단 
+			if (cardSum[user] <= 21) //Stop changing the Ace card value if the sum of the cards is 21 or less than 21 
 				break;
 		}
 	}
@@ -240,30 +240,30 @@ int calcStepResult(int user) {
 
 //win? lose? Round result 
 int checkResult(int user) {
-	if ((cardcnt(user) == 2) && (calcStepResult(user) == 21)) //두 장의 카드 합이 21이면 블랙잭 (dollar 계산은 메인함수에서 이미 처리)
+	if ((cardcnt(user) == 2) && (calcStepResult(user) == 21)) //Blackjack if two cards total 21 (dollar calculation already handled by main function)
 	{
 		printf("BlackJack! win ($%d)\n", dollar[user]); 
 	}
-	else if ((cardcnt(n_user) == 2) && (calcStepResult(n_user) == 21)) //user가 블랙잭이 아닌데 server가 블랙잭이면 바로 패배 
+	else if ((cardcnt(n_user) == 2) && (calcStepResult(n_user) == 21)) //If the player's not blackjack, but the server's blackjack, the player loses 
 	{
 		dollar[user] -= bet[user];
 		printf("lose! (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);
 	}
-	else if (calcStepResult(user) > 21) //user의 카드 합이 21을 초과하면 바로 패배 (dollar 계산은 메인함수에서 이미 처리)
+	else if (calcStepResult(user) > 21) //If the sum of the players' cards exceeds 21, the player loses immediately (dollar calculation already handled by main function)
 	{
 		printf("lose due to overflow! ($%d)\n", dollar[user]);
 	}
-	else if (calcStepResult(n_user) > 21) //user의 카드 합이 21 이하인데 server의 카드 합이 21을 초과하면 user는 승리 
+	else if (calcStepResult(n_user) > 21) //If the sum of the players' cards is less than 21 and the sum of the server's exceeds 21, the player wins 
 	{
 		dollar[user] += bet[user];          
 		printf("win (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]); 		
 	}
-	else if (calcStepResult(user) >= calcStepResult(n_user)) //server의 카드 합보다 user의 카드 합이 같거나 크면 승리 
+	else if (calcStepResult(user) >= calcStepResult(n_user)) //If the sum of the player's cards is equal or greater than the sum of the server's, the player wins
 	{
 		dollar[user] += bet[user];
 		printf("win (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);
 	}
-	else if (calcStepResult(user) < calcStepResult(n_user)) //server의 카드 합보다 user의 카드 합이 작으면 패배 
+	else if (calcStepResult(user) < calcStepResult(n_user)) //If the sum of the player's cards is smaller than the sum of the server's, the player loses 
 	{
 		dollar[user] -= bet[user];
 		printf("lose! (sum:%d) --> $%d\n", calcStepResult(user), dollar[user]);

@@ -13,9 +13,9 @@ extern int gameEnd;
 //ending game functions -----------------------------
 
 
-//카드 소진 검사 
+//card exhaustion check 
 int checkCardIndex() {
-	if (cardIndex >= N_CARD) //card tray에 카드가 소진됨
+	if (cardIndex >= N_CARD)
 	{	
 		gameEnd = 1; //game end flag(1)
 	}
@@ -23,35 +23,35 @@ int checkCardIndex() {
 	return 0;
 }
 
-//파산 검사
+//bankruptcy check
 int checkDollar() {
 	int i;
 	
 	for (i=0;i<n_user;i++)
 	{
-		if (dollar[i] <= 0) //player 한명이 파산
+		if (dollar[i] <= 0) 
 		{
-			gameEnd = i+2; //game end flag(2): gameEnd 값이 0이면 게임이 끝나지 않고 1이면 game end flag(1)과 겹치므로 player number에 2를 더해줌 
+			gameEnd = i+2; //game end flag(2): If the gameEnd value is 0 then the game is not over and 1 overlaps the game end flag (1) so adds 2 to the player number 
 		}
 	}
 	
 	return 0;
 }
 
-//최종 승자 체크 
+//final winner check 
 int checkWinner() {
-	int dollarMax = 0; //최종 자산에서 제일 큰 값 
+	int dollarMax = 0; //the largest value of the final asset 
 	int winner;
 	int i;
 	
-	for(i=0;i<n_user;i++) //나를 포함한 player들의 자산을 비교 
+	for(i=0;i<n_user;i++) //Compare the assets of players including me 
 	{
-		if (dollar[i] > dollarMax)
+		if (dollar[i] >= dollarMax)
 		{
 			dollarMax = dollar[i];
 			winner = i;
 		}
 	}	
 	
-	return winner; //최종 승리한 player의 number을 반환 
+	return winner; //Return the number of the final winning player 
 }

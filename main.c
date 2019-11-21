@@ -4,7 +4,7 @@
 #include "blackjack.h"
 
 
-//52장의 모든 카드에 계산에 사용되는 실제 값 부여 
+//All cards are given the actual value used for calculation 
 int TrumpCard[N_CARD] = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
 						 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
 						 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,
@@ -22,15 +22,15 @@ int n_user;									//number of users
 
 
 //play yard information
-int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];	//cards that currently the players hold- my number: 0, player N's number: N, server: n_user + 1
-int cardSum[N_MAX_USER+1];					//sum of the cards- my number: 0, player N's number: N, server: n_user + 1
+int cardhold[N_MAX_USER+1][N_MAX_CARDHOLD];	//cards that currently the players hold- my number: 0, player N's number: N, server's number: n_user
+int cardSum[N_MAX_USER+1];					//sum of the cards- my number: 0, player N's number: N, server's number: n_user
 int bet[N_MAX_USER];						//current betting- my number: 0, player N's number: N
 int gameEnd = 0; 							//game end flag
 
 
 //main function
 int main(int argc, char *argv[]) {
-	int roundIndex = 1; //1라운드부터 시작 
+	int roundIndex = 1; //Start with the first round 
 	int i; 
 	int j;
 	
@@ -43,17 +43,17 @@ int main(int argc, char *argv[]) {
 	//Game initialization --------
 	//1. players' dollar
 	for (i=0;i<n_user;i++)
-		dollar[i] = N_DOLLAR; //모든 플레이어가 초기 자본 N_DOLLAR를 가지고 시작함 
+		dollar[i] = N_DOLLAR; //All players start with initial asset N_DOLLAR 
 	
 	//2. card tray
-	mixCardTray(); //카드를 섞어서 card tray에 넣음 
+	mixCardTray(); //Mix the cards and put them in the card tray 
        
 
 
 
 	//Game start --------
 	do {
-		//플레이어들의 모든 cardhold 변수의 값을 -1로 초기화 (빈 cardtray 변수와 채워진 cardtray 변수의 구분을 위해)
+		//Initialize the value of all cardhold variables to -1 (to differentiate between empty and filled cardhold variables)
 		for (i=0;i<n_user+1;i++) 
 		{
 			for (j=0;j<N_MAX_CARDHOLD;j++)
@@ -66,10 +66,10 @@ int main(int argc, char *argv[]) {
 		printf("------------ ROUND %d (cardIndex:%d)--------------------------\n", roundIndex, cardIndex);
 		printf("------------------------------------------------\n\n");
 		
-		betDollar(); // betting step
+		betDollar(); //betting step
 		
-		offerCards(); // give cards to all the players	
-		if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+		offerCards(); //give cards to all the players	
+		if (gameEnd != 0) //game end flag --> Loop Out
 		{
 			break;
 		}
@@ -85,20 +85,20 @@ int main(int argc, char *argv[]) {
 		printUserCardStatus(0); //print current card status
 		
 		//check the card status
-		if (calcStepResult(0) == 21) //처음 두 장의 카드 합이 21이면 블랙잭, 바로 승리 
+		if (calcStepResult(0) == 21) //If the first two cards add up to 21, blackjack- a direct victory 
 		{
 			dollar[0] += bet[0]*2;
 			printf("Black Jack!congratulation, you win!! --> +$%d ($%d)\n", bet[0]*2, dollar[0]);
 		}
 		else if (calcStepResult(0) < 21)		
 		{
-			getAction(0); //go? stay? 반복순환 
-			if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+			getAction(0); //go? stay? repeated cycle 
+			if (gameEnd != 0) //game end flag --> Loop Out
 			{
 				break;
 			}
 		
-			if (calcStepResult(0) > 21) //카드 합이 21을 초과하게 되면 바로 패배 
+			if (calcStepResult(0) > 21) //If the sum of the cards exceeds 21, a direct defeat 
 			{
 				dollar[0] -= bet[0];
 				printf("DEAD (sum:%d) --> -$%d ($%d)\n", calcStepResult(0), bet[0], dollar[0]);				
@@ -117,20 +117,20 @@ int main(int argc, char *argv[]) {
 			printUserCardStatus(i); //print current card status
 			
 			//check the card status
-			if (calcStepResult(i) == 21) //처음 두 장의 카드 합이 21이면 블랙잭, 바로 승리 
+			if (calcStepResult(i) == 21) //If the first two cards add up to 21, blackjack- a direct victory 
 			{
 				dollar[i] += bet[i]*2;
 				printf("Black Jack!congratulation, you win!! --> +$%d ($%d)\n", bet[i]*2, dollar[i]);
 			}
 			else if (calcStepResult(i) < 17)
 			{
-				getAction(i); //카드 합이 17 미만이면 go 반복, 17 이상 21 미만이면 stay
-				if (gameEnd != 0) //game end flag --> 루프 빠져나오기 (for문 루프) 
+				getAction(i); //If the card sum is less than 17 then repeat 'go', 'stay' if the card is more than 17 and less than 21
+				if (gameEnd != 0) //game end flag --> Loop Out (for-loop) 
 				{
 					break;
 				} 
 				
-				if (calcStepResult(i) > 21) //go를 하여 카드 합이 21을 초과하게 되면 바로 패배
+				if (calcStepResult(i) > 21) //If the player 'go' and the sum of the cards exceeds 21, a direct defeat
 				{
 					dollar[i] -= bet[i];
 					printf("DEAD (sum:%d) --> -$%d ($%d)\n", calcStepResult(i), bet[i], dollar[i]);	
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
 				printf("STAY!\n");
 			}
 		}
-		if (gameEnd != 0) //game end flag --> 루프 빠져나오기 (do-while문 루프) 
+		if (gameEnd != 0) //game end flag --> Loop Out (do-while loop) 
 		{
 			break;
 		} 
@@ -154,20 +154,20 @@ int main(int argc, char *argv[]) {
 		printUserCardStatus(n_user); //print current card status
 		
 		//check the card status
-		if (calcStepResult(n_user) == 21) //처음 두 장의 카드 합이 21이면 블랙잭
+		if (calcStepResult(n_user) == 21) //If the first two cards add up to 21, blackjack
 		{
 			printf("Black Jack!T_T... server win\n");
 			printf("[[[[[[[ server result is ....  Blackjack, T_T all remained players lose! ]]]]]]]\n");
 		}
 		else if (calcStepResult(n_user) < 17)
 		{
-			getAction(n_user); //카드 합이 17 미만이면 go 반복, 17 이상 21 미만이면 stay 
-			if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+			getAction(n_user); //If the card sum is less than 17 then repeat 'go', 'stay' if the card is more than 17 and less than 21 
+			if (gameEnd != 0) //game end flag --> Loop Out
 			{
 				break;
 			}
 			
-			if (calcStepResult(n_user) > 21) //go를 하여 server의 카드 합이 21을 초과하는 경우 남은 player들은 모두 승리 
+			if (calcStepResult(n_user) > 21) //If the server 'go' and the sum of the cards exceeds 21, all the remaining players will win 
 			{
 				printf("server DEAD (sum:%d)\n", calcStepResult(n_user));
 				printf("[[[[[[[ server result is .... ....overflow!! ]]]]]]]\n\n\n");
@@ -201,8 +201,8 @@ int main(int argc, char *argv[]) {
 		}
 		printf("\n");
 		
-		checkDollar(); //round가 끝날 때마다 파산 검사 실행 
-		if (gameEnd != 0) //game end flag --> 루프 빠져나오기
+		checkDollar(); //Run bankruptcy check at the end of each round 
+		if (gameEnd != 0) //game end flag --> Loop Out
 		{
 			break;
 		}
@@ -215,18 +215,18 @@ int main(int argc, char *argv[]) {
 	
 	
 	//Game result --------
-	//game end flag(1): card tray에 카드가 소진됨
+	//game end flag(1): card exhaustion
 	if (gameEnd == 1) 
 	{
 		printf("card ran out of the tray!! finishing the game...\n\n\n\n");
 	}
 	
-	//game end flag(2): player 한명이 파산
-	else if (gameEnd == 2) //내가 파산한 경우 (gameEnd == (0 + 2))
+	//game end flag(2): one player bankrupted
+	else if (gameEnd == 2) //in case of my bankruptcy (gameEnd == (0 + 2))
 	{ 
 	printf("   -> you are bankrupted! game will be ended\n\n\n\n");
 	}
-	else //computer player가 파산한 경우 (gameEnd == (N + 2))
+	else //in case of computer player's bankruptcy (gameEnd == (N + 2))
 	{
 		printf("   -> player %d's bankrupted! game will be ended\n\n\n\n", gameEnd - 2);
 	}
@@ -243,11 +243,11 @@ int main(int argc, char *argv[]) {
 			printf("$%d ", dollar[i]);
 	}
 	
-	if (checkWinner() == 0) //내가 최종 승자일 때 
+	if (checkWinner() == 0) //when I'm the final winner 
 	{
 		printf("\n\n\nyou win!!!!\n");
 	}
-	else //computer player가 최종 승자일 때
+	else //when computer player's the final winner
 	{
 		printf("\n\n\nplayer %d's win\n", checkWinner());
 	}
